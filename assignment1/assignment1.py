@@ -1,3 +1,15 @@
 # Write your code here.
 
- print("Hello")
+
+#Task 1: Hello
+
+def hello():
+    return "Hello!"
+
+
+
+
+#Task 2:
+
+def name():
+    return "Hello,name"
