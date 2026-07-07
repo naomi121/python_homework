@@ -60,7 +60,11 @@ def data_type_conversion(value, type_requested):
     
 
 
-    #Task 5: Grade
+    
+    
+
+
+#Task 5: Grade
 
     def grade(*args):
         try:
@@ -79,3 +83,94 @@ def data_type_conversion(value, type_requested):
                 
         except Exception:
          return "Invalid data was provided."
+
+
+
+#Task 6: Use a For loop with a Range
+
+def repeat(string, count):
+    result = ""
+    for _ in range(count):
+        result += string
+    return result
+
+
+
+#Task 7: Student Scores, using **Kwargs
+
+def student_scores(metric, **kwargs):
+    if not kwargs:
+        return None
+        
+    if metric == "best":
+        best_student = None
+        highest_score = -1
+        for student, score in kwargs.items():
+            if score > highest_score:
+                highest_score = score
+                best_student = student
+        return best_student
+        
+    elif metric == "mean":
+        total_score = sum(kwargs.values())
+        return total_score / len(kwargs)
+
+
+#Task 8: Titleize, wuth string and list operations
+
+def student_scores(metric, **kwargs):
+    if not kwargs:
+        return None
+        
+    if metric == "best":
+        best_student = None
+        highest_score = -1
+        for student, score in kwargs.items():
+            if score > highest_score:
+                highest_score = score
+                best_student = student
+        return best_student
+        
+    elif metric == "mean":
+        total_score = sum(kwargs.values())
+        return total_score / len(kwargs)
+
+
+
+#Task 9: Hangman, with more String Operations
+def hangman(secret, guess):
+    result = ""
+    for letter in secret:
+        if letter in guess:
+            result += letter
+        else:
+            result += "_"
+    return result
+
+
+#Task 10: Pig Latin, Another String Manipulation Exercise
+def pig_latin(text):
+    words = text.split()
+    vowels = "aeiou"
+    result_words = []
+    
+    for word in words:
+        if word[0] in vowels:
+            result_words.append(word + "ay")
+        elif word.startswith("qu"):
+            result_words.append(word[2:] + "quay")
+        else:
+            consonants = ""
+            for letter in word:
+                if letter not in vowels:
+                    consonants += letter
+                else:
+                    break
+            
+            if consonants and word[len(consonants):].startswith("qu"):
+                consonants += "qu"
+                
+            result_words.append(word[len(consonants):] + consonants + "ay")
+            
+    return " ".join(result_words)
+
