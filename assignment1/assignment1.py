@@ -12,4 +12,4 @@ def hello():
 #Task 2:
 
 def name():
-    return "Hello,name"
+    return "greet"
