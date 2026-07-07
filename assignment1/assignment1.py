@@ -162,17 +162,18 @@ def pig_latin(text):
             result_words.append(word[2:] + "quay")
         else:
             consonants = ""
+            idx = 0
             for letter in word:
                 if letter not in vowels:
                     consonants += letter
+                    idx += 1
                 else:
                     break
             
-            remaining = word[len(consonants):]
-            if remaining.startswith("qu"):
-                consonants += "qu"
-                remaining = remaining[2:]
+            if consonants.endswith("q") and idx < len(word) and word[idx] == "u":
+                consonants += "u"
+                idx += 1
                 
-            result_words.append(remaining + consonants + "ay")
+            result_words.append(word[idx:] + consonants + "ay")
             
     return " ".join(result_words)
