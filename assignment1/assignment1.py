@@ -11,9 +11,8 @@ def hello():
 
 #Task 2:
 
-def name():
-    return 'Hello, Name!'
-
+def greet(name):
+    return f'Hello, {name}!'
 
 
 #Task 3: Calculator 
