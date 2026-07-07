@@ -118,22 +118,23 @@ def student_scores(metric, **kwargs):
 
 #Task 8: Titleize, wuth string and list operations
 
-def student_scores(metric, **kwargs):
-    if not kwargs:
-        return None
+def titleize(string):
+    words = string.split()
+    if not words:
+        return ""
         
-    if metric == "best":
-        best_student = None
-        highest_score = -1
-        for student, score in kwargs.items():
-            if score > highest_score:
-                highest_score = score
-                best_student = student
-        return best_student
-        
-    elif metric == "mean":
-        total_score = sum(kwargs.values())
-        return total_score / len(kwargs)
+    lowercase_exceptions = ["a", "on", "an", "the", "of", "and", "is", "in"]
+    result_words = []
+    
+    for i, word in enumerate(words):
+        if i == 0 or i == len(words) - 1:
+            result_words.append(word.capitalize())
+        elif word.lower() in lowercase_exceptions:
+            result_words.append(word.lower())
+        else:
+            result_words.append(word.capitalize())
+            
+    return " ".join(result_words)
 
 
 
@@ -157,8 +158,6 @@ def pig_latin(text):
     for word in words:
         if word[0] in vowels:
             result_words.append(word + "ay")
-        elif word.startswith("qu"):
-            result_words.append(word[2:] + "quay")
         else:
             consonants = ""
             for letter in word:
@@ -167,10 +166,11 @@ def pig_latin(text):
                 else:
                     break
             
-            if consonants and word[len(consonants):].startswith("qu"):
+            remaining_word = word[len(consonants):]
+            if remaining_word.startswith("qu"):
                 consonants += "qu"
+                remaining_word = remaining_word[2:]
                 
-            result_words.append(word[len(consonants):] + consonants + "ay")
+            result_words.append(remaining_word + consonants + "ay")
             
     return " ".join(result_words)
-
