@@ -65,24 +65,24 @@ def data_type_conversion(value, type_requested):
 
 
 #Task 5: Grade
-
-    def grade(*args):
-        try:
-            average = sum(args) / len(args)
+def grade(*args):
+    try:
+        average = sum(args) / len(args)
+        
+        if average >= 90:
+            return "A"
+        elif average >= 80:
+            return "B"
+        elif average >= 70:
+            return "C"
+        elif average >= 60:
+            return "D"
+        else:
+            return "F"
             
-            if average >= 90:
-                return "A"
-            elif average >= 80:
-                return "B"
-            elif average >= 70:
-                return "C"
-            elif average >= 60:
-                return "D"
-            else:
-                return "F"
-                
-        except Exception:
-         return "Invalid data was provided."
+    except Exception:
+        return "Invalid data was provided."
+
 
 
 
