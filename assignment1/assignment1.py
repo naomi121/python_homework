@@ -164,6 +164,7 @@ def pig_latin(text):
             consonants = ""
             idx = 0
             for letter in word:
+                
                 if letter not in vowels:
                     consonants += letter
                     idx += 1
