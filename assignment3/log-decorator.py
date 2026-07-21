@@ -12,6 +12,7 @@ def logger_decorator(func):
     def wrapper(*args, **kwargs):
         pos_params = list(args) if args else "none"
         kw_params = kwargs if kwargs else "none"
+
         result = func(*args, **kwargs)
 
         log_entry = (
@@ -27,21 +28,20 @@ def logger_decorator(func):
 
 
 @logger_decorator
-def greet():
+def function_no_params():
     print("Hello, World!")
 
 
 @logger_decorator
-def sum_all(*args):
+def function_positional_args(*args):
     return True
 
 
 @logger_decorator
-def process_kwargs(**kwargs):
+def function_keyword_args(**kwargs):
     return logger_decorator
 
 
-greet()
-sum_all(1, 2, 3)
-process_kwargs(a=1, b=2)
-
+function_no_params()
+function_positional_args(1, 2, 3)
+function_keyword_args(a=1, b=2)

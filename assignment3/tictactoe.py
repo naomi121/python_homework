@@ -54,67 +54,63 @@ class Board:
             self.turn = "X"
 
     def whats_next(self):
-        cat = True
-        for i in range(3):
-            for j in range(3):
-                if self.board_array[i][j] == " ":
-                    cat = False
-                else:
-                    continue
-                break
-            else:
-                continue
-            break
-        if cat:
-            return (True, "Cat's Game.")
-
         win = False
+        winner = None
+
         for i in range(3):
-            if self.board_array[i][0] != " ":
-                if (
-                    self.board_array[i][0]
-                    == self.board_array[i][1]
-                    == self.board_array[i][2]
-                ):
-                    win = True
-                    break
+            if (
+                self.board_array[i][0] != " "
+                and self.board_array[i][0]
+                == self.board_array[i][1]
+                == self.board_array[i][2]
+            ):
+                win = True
+                winner = self.board_array[i][0]
+                break
 
         if not win:
             for i in range(3):
-                if self.board_array[0][i] != " ":
-                    if (
-                        self.board_array[0][i]
-                        == self.board_array[1][i]
-                        == self.board_array[2][i]
-                    ):
-                        win = True
-                        break
-
-        if not win:
-            if self.board_array[1][1] != " ":
                 if (
-                    self.board_array[0][0]
-                    == self.board_array[1][1]
-                    == self.board_array[2][2]
+                    self.board_array[0][i] != " "
+                    and self.board_array[0][i]
+                    == self.board_array[1][i]
+                    == self.board_array[2][i]
                 ):
                     win = True
-                if (
-                    self.board_array[0][2]
-                    == self.board_array[1][1]
-                    == self.board_array[2][0]
-                ):
-                    win = True
+                    winner = self.board_array[0][i]
+                    break
 
         if not win:
-            if self.turn == "X":
-                return (False, "X's turn.")
-            else:
-                return (False, "O's turn.")
+            if (
+                self.board_array[1][1] != " "
+                and self.board_array[0][0]
+                == self.board_array[1][1]
+                == self.board_array[2][2]
+            ):
+                win = True
+                winner = self.board_array[1][1]
+            elif (
+                self.board_array[1][1] != " "
+                and self.board_array[0][2]
+                == self.board_array[1][1]
+                == self.board_array[2][0]
+            ):
+                win = True
+                winner = self.board_array[1][1]
+
+        if win:
+            return (True, f"{winner} has won")
+
+        empty_spaces = any(
+            " " in row for row in self.board_array
+        )
+        if not empty_spaces:
+            return (True, "Cat's Game")
+
+        if self.turn == "X":
+            return (False, "X's turn")
         else:
-            if self.turn == "O":
-                return (True, "X wins!")
-            else:
-                return (True, "O wins!")
+            return (False, "O's turn")
 
 
 game_board = Board()
@@ -123,11 +119,13 @@ game_over = False
 while not game_over:
     print(game_board)
     status = game_board.whats_next()
+
     if status[0]:
         print(status[1])
         break
 
-    user_move = input(f"{status[1]} Enter move: ")
+    user_move = input(f"{status[1]}. Enter move: ")
+
     try:
         game_board.move(user_move)
     except TictactoeException as e:
