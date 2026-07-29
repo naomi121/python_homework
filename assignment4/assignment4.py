@@ -59,13 +59,13 @@ clean_data.drop_duplicates(inplace=True)
 
 clean_data['Age'] = pd.to_numeric(clean_data['Age'], errors='coerce')
 
-clean_data['Salary'] = clean_data['Salary'].replace(['unknown', 'n/a'], pd.NA)
+clean_data['Salary'] = clean_data['Salary'].replace(['unknown', 'n/a'], None)
 clean_data['Salary'] = pd.to_numeric(clean_data['Salary'], errors='coerce')
 
 clean_data['Age'] = clean_data['Age'].fillna(clean_data['Age'].mean())
 clean_data['Salary'] = clean_data['Salary'].fillna(clean_data['Salary'].median())
 
-clean_data['Hire Date'] = pd.to_datetime(clean_data['Hire Date'], errors='coerce')
+clean_data['Hire Date'] = pd.to_datetime(clean_data['Hire Date'], format='mixed')
 
 clean_data['Name'] = clean_data['Name'].str.strip()
 clean_data['Department'] = clean_data['Department'].str.strip().str.upper()
