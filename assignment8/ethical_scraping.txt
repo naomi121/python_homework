@@ -1,8 +1,17 @@
-1. Restricted Sections:
-Wikipedia restricts crawling in sections such as edit histories (/w/index.php), administrative pages (/wiki/Special:), talk pages, and API endpoints missing required search parameters.
+Challenges Faced & Resolutions:
 
-2. User Agent Rules:
-Yes, specific user agents have tailored rules. Unregulated or aggressive bots are completely disallowed, whereas recognized search crawlers (like Googlebot) are given access to public instructional and reference pages.
+1. Dynamic Page Rendering:
+The Durham County Library search results load asynchronously via JavaScript. Accessing elements immediately caused empty results. 
+Resolution: Introduced execution pauses allowing the dynamic DOM elements to fully populate prior to query extraction.
 
-3. Reflection on Purpose of robots.txt:
-Websites publish a robots.txt file to define boundaries for automated crawlers, safeguard bandwidth, and protect server infrastructure from denial-of-service conditions. Adhering to these rules promotes ethical scraping by maintaining a mutual agreement between developers and site operators to respect data privacy and avoid server disruption. It ensures public web scraping remains sustainable without harming real-time user experiences.
+2. Capturing Multiple Authors:
+Some search entries contain multiple authors in distinct anchor tags.
+Resolution: Extracted elements using find_elements and combined author names using string joining with semicolon delimiters ('; '.join()).
+
+3. Navigating Compound DOM Class Names:
+Bibliocommons uses nested class names for title and format elements.
+Resolution: Used scoped XPath queries relative to each parent list item (e.g., .//a[contains(@class, 'author-link')]) to accurately extract sub-elements.
+
+4. Isolating OWASP Top 10 Entries:
+The OWASP project page contains multiple links with similar naming conventions across sidebars and main content.
+Resolution: Constructed structural XPaths targeting the main article element directly to isolate the specific 10 core vulnerability links without scraping auxiliary menu items.
