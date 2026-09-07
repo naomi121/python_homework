@@ -1,8 +1,8 @@
 1. Restricted Sections:
-Wikipedia restricts crawling in areas such as edit histories, special administrative pages, talk pages, API query endpoints without proper parameters, and dynamic search interfaces (e.g., /w/index.php, /wiki/Special:).
+Wikipedia restricts crawling in sections such as edit histories (/w/index.php), administrative pages (/wiki/Special:), talk pages, and API endpoints missing required search parameters.
 
 2. User Agent Rules:
-Yes, specific user agents like Googlebot, Bingbot, and custom crawlers have tailored rules. Some aggressive bots are completely disallowed, while polite crawlers are permitted on general content pages.
+Yes, specific user agents have tailored rules. Unregulated or aggressive bots are completely disallowed, whereas recognized search crawlers (like Googlebot) are given access to public instructional and reference pages.
 
 3. Reflection on Purpose of robots.txt:
-Websites use robots.txt to define crawling boundaries, prevent server overload, and protect sensitive or non-public pages from being indexed. It promotes ethical scraping by establishing clear consent guidelines between site owners and automated tools, ensuring crawlers consume resources responsibly without disrupting service for real human users....
+Websites publish a robots.txt file to define boundaries for automated crawlers, safeguard bandwidth, and protect server infrastructure from denial-of-service conditions. Adhering to these rules promotes ethical scraping by maintaining a mutual agreement between developers and site operators to respect data privacy and avoid server disruption. It ensures public web scraping remains sustainable without harming real-time user experiences.
