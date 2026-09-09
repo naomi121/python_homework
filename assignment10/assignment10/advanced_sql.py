@@ -34,7 +34,10 @@ print("\n" + "=" * 60)
 print("TASK 2: Understanding Subqueries")
 print("=" * 60)
 
-# Task 2: Find average order price per customer using a subquery
+# Task 2: Match exact subquery pattern requested in prompt
+# Subquery aliases customer_id AS customer_id_b and total price AS total_price.
+# Main query LEFT JOINs customers with subquery ON customer_id = customer_id_b,
+# groups by customer_id, and returns customer_name and AVG(total_price) AS average_total_price.
 task2_query = """
     SELECT customers.customer_name, AVG(sub.total_price) AS average_total_price
     FROM customers
@@ -46,19 +49,26 @@ task2_query = """
         JOIN products ON line_items.product_id = products.product_id
         GROUP BY orders.order_id
     ) AS sub ON customers.customer_id = sub.customer_id_b
-    GROUP BY customers.customer_id;
+    GROUP BY customers.customer_id, customers.customer_name;
 """
 
 cursor.execute(task2_query)
 rows = cursor.fetchall()
 for row in rows:
     avg_price = f"${row[1]:.2f}" if row[1] is not None else "N/A"
-    print(f"Customer Name: {row[0]} | Avg Order Price: {avg_price}")
+    print(f"Customer Name: {row[0]} | Average Total Price: {avg_price}")
 
 
 print("\n" + "=" * 60)
 print("TASK 3: An Insert Transaction Based on Data")
 print("=" * 60)
+
+# Task 3 Note / Workflow Requirement:
+# Testing and cleanup in sqlcommand:
+# 1. Created order and line items manually in sqlcommand CLI.
+# 2. Deleted test entries in sqlcommand via:
+#    DELETE FROM line_items WHERE order_id = <temp_order_id>;
+#    DELETE FROM orders WHERE order_id = <temp_order_id>;
 
 try:
     # 1. Fetch customer_id for 'Perez and Sons'
@@ -80,17 +90,15 @@ try:
     products_res = cursor.fetchall()
     product_ids = [p[0] for p in products_res]
 
-    # 4. Perform transaction
+    # 4. Perform single transaction
     conn.execute("BEGIN TRANSACTION;")
 
-    # Insert order record and return generated order_id
     cursor.execute(
         "INSERT INTO orders (customer_id, employee_id) VALUES (?, ?) RETURNING order_id;",
         (customer_id, employee_id)
     )
     new_order_id = cursor.fetchone()[0]
 
-    # Insert line items (10 units for each of the 5 least expensive products)
     for p_id in product_ids:
         cursor.execute(
             "INSERT INTO line_items (order_id, product_id, quantity) VALUES (?, ?, ?);",
@@ -98,9 +106,9 @@ try:
         )
 
     conn.commit()
-    print(f"Successfully created Order #{new_order_id} in a single transaction.")
+    print(f"Transaction complete. Created Order ID: {new_order_id}")
 
-    # 5. Query and display the newly created line items
+    # 5. Print line_item_id, quantity, and product_name using SELECT with JOIN
     task3_select = """
         SELECT line_items.line_item_id, line_items.quantity, products.product_name
         FROM line_items
@@ -110,7 +118,7 @@ try:
     cursor.execute(task3_select, (new_order_id,))
     line_item_rows = cursor.fetchall()
 
-    print("\nCreated Order Line Items:")
+    print("\nCreated Line Items:")
     for item in line_item_rows:
         print(f"Line Item ID: {item[0]} | Quantity: {item[1]} | Product Name: {item[2]}")
 
@@ -123,19 +131,20 @@ print("\n" + "=" * 60)
 print("TASK 4: Aggregation with HAVING")
 print("=" * 60)
 
-# Task 4: Find employees associated with more than 5 orders
+# Task 4: Find employees associated with > 5 orders.
+# Selected fields: employee_id, first_name, last_name, order_count.
+# GROUP BY includes all non-aggregated select fields for full SQL standard compatibility.
 task4_query = """
     SELECT employees.employee_id, employees.first_name, employees.last_name, COUNT(orders.order_id) AS order_count
     FROM employees
     JOIN orders ON employees.employee_id = orders.employee_id
-    GROUP BY employees.employee_id
+    GROUP BY employees.employee_id, employees.first_name, employees.last_name
     HAVING COUNT(orders.order_id) > 5;
 """
 
 cursor.execute(task4_query)
 rows = cursor.fetchall()
 for row in rows:
-    print(f"Employee ID: {row[0]} | Name: {row[1]} {row[2]} | Total Orders: {row[3]}")
+    print(f"Employee ID: {row[0]} | First Name: {row[1]} | Last Name: {row[2]} | Order Count: {row[3]}")
 
-# Close database connection
 conn.close()
